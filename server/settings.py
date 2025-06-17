@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',  # 跨域
-    'myapp'
+    'myapp',
+    'core'
 ]
 
 MIDDLEWARE = [
