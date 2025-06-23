@@ -1,39 +1,24 @@
-# thing.py
 from rest_framework.decorators import api_view, authentication_classes
-
-from myapp import utils
 from myapp.auth.authentication import AdminTokenAuthtication
 from myapp.handler import APIResponse
-from myapp.models import Classification, Thing, Tag  # 这里Thing是客户实体，Classification分类，Tag标签
 from myapp.permission.permission import isDemoAdminUser
-from myapp.serializers import ThingSerializer, UpdateThingSerializer
+from myapp import utils
+
+from core.models import Thing
+from core.serializers import ThingSerializer, UpdateThingSerializer
 
 
 @api_view(['GET'])
 def list_api(request):
-    if request.method == 'GET':
-        keyword = request.GET.get("keyword", None)
-        c = request.GET.get("c", None)
-        tag = request.GET.get("tag", None)
-        if keyword:
-            things = Thing.objects.filter(name__icontains=keyword).order_by('-create_time')
-        elif c:
-            try:
-                classification = Classification.objects.get(pk=c)
-                things = classification.classification_thing.all()
-            except Classification.DoesNotExist:
-                return APIResponse(code=1, msg='分类不存在')
-        elif tag:
-            try:
-                tag_obj = Tag.objects.get(id=tag)
-                things = tag_obj.thing_set.all()
-            except Tag.DoesNotExist:
-                return APIResponse(code=1, msg='标签不存在')
-        else:
-            things = Thing.objects.all().order_by('-create_time')
+    keyword = request.GET.get("keyword", None)
 
-        serializer = ThingSerializer(things, many=True)
-        return APIResponse(code=0, msg='查询成功', data=serializer.data)
+    if keyword:
+        things = Thing.objects.filter(name__icontains=keyword).order_by('-create_time')
+    else:
+        things = Thing.objects.all().order_by('-create_time')
+
+    serializer = ThingSerializer(things, many=True)
+    return APIResponse(code=0, msg='查询成功', data=serializer.data)
 
 
 @api_view(['GET'])
@@ -60,7 +45,6 @@ def create(request):
         serializer.save()
         return APIResponse(code=0, msg='创建成功', data=serializer.data)
     else:
-        print(serializer.errors)
         utils.log_error(request, '参数错误')
         return APIResponse(code=1, msg='创建失败')
 
@@ -82,7 +66,6 @@ def update(request):
         serializer.save()
         return APIResponse(code=0, msg='更新成功', data=serializer.data)
     else:
-        print(serializer.errors)
         utils.log_error(request, '参数错误')
         return APIResponse(code=1, msg='更新失败')
 

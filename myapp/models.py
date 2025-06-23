@@ -58,29 +58,22 @@ class Classification(models.Model):
         db_table = "b_classification"
 
 
+
+
 class Thing(models.Model):
-    STATUS_CHOICES = (
-        ('0', '上架'),
-        ('1', '下架'),
-    )
     id = models.BigAutoField(primary_key=True)
-    classification = models.ForeignKey(Classification, on_delete=models.CASCADE, blank=True, null=True,
-                                       related_name='classification_thing')
-    tag = models.ManyToManyField(Tag, blank=True)
-    xuehao = models.CharField(max_length=20, blank=True, null=True)
-    name = models.CharField(max_length=20, blank=True, null=True)
-    sex = models.CharField(max_length=20, blank=True, null=True)
-    birthday = models.CharField(max_length=20, blank=True, null=True)
-    jiguan = models.CharField(max_length=20, blank=True, null=True)
-    sfz = models.CharField(max_length=20, blank=True, null=True)
-    minzu = models.CharField(max_length=20, blank=True, null=True)
-    remark = models.CharField(max_length=30, blank=True, null=True)
-    cover = models.ImageField(upload_to='cover/', null=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='0')
+    name = models.CharField(max_length=100, blank=True, null=True)           # 客户名称
+    birthday = models.CharField(max_length=20, blank=True, null=True)        # 生日
+    address = models.CharField(max_length=255, blank=True, null=True)        # 地址
+    companyName = models.CharField(max_length=255, blank=True, null=True)    # 公司名称
+    taxAdvisor = models.CharField(max_length=100, blank=True, null=True)     # 公司税理士
+    customerType = models.CharField(max_length=50, blank=True, null=True)    # 客户类型
+    remark = models.CharField(max_length=255, blank=True, null=True)         # 备注
     create_time = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         db_table = "b_thing"
+
 
 
 class Comment(models.Model):

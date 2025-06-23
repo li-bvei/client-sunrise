@@ -12,6 +12,9 @@ urlpatterns = [
     path('admin/thing/create', views.admin.thing.create),
     path('admin/thing/update', views.admin.thing.update),
     path('admin/thing/delete', views.admin.thing.delete),
+
+
+
     path('admin/comment/list', views.admin.comment.list_api),
     path('admin/comment/create', views.admin.comment.create),
     path('admin/comment/update', views.admin.comment.update),
